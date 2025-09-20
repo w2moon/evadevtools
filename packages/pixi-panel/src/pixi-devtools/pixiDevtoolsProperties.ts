@@ -28,6 +28,14 @@ export default function pixiDevtoolsProperties(devtools: PixiDevtools) {
           key: property,
           get: () => object[property] as string | number | boolean,
           set: (value: string | number | boolean) => {
+            // 先检查是否有 attachedObserver，如果有则先设置 observer 上的值
+            if (
+              object.attachedObserver &&
+              typeof object.attachedObserver === "object"
+            ) {
+              object.attachedObserver[property] = value;
+            }
+            // 然后设置原始对象上的值
             object[property] = value;
           },
         },
@@ -80,6 +88,15 @@ export default function pixiDevtoolsProperties(devtools: PixiDevtools) {
           key: keyX,
           get: () => node[property].x as number,
           set: (value: number) => {
+            // 先检查是否有 attachedObserver，如果有则先设置 observer 上的值
+            const object = node;
+            if (
+              object.attachedObserver &&
+              typeof object.attachedObserver === "object"
+            ) {
+              object.attachedObserver[keyX] = value;
+            }
+            // 然后设置原始对象上的值
             node[property].x = value;
           },
         },
@@ -87,6 +104,15 @@ export default function pixiDevtoolsProperties(devtools: PixiDevtools) {
           key: keyY,
           get: () => node[property].y as number,
           set: (value: number) => {
+            // 先检查是否有 attachedObserver，如果有则先设置 observer 上的值
+            const object = node;
+            if (
+              object.attachedObserver &&
+              typeof object.attachedObserver === "object"
+            ) {
+              object.attachedObserver[keyY] = value;
+            }
+            // 然后设置原始对象上的值
             node[property].y = value;
           },
         },

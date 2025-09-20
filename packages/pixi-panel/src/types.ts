@@ -46,6 +46,14 @@ export type UniversalNode =
   | Scenes.SceneManager
   | GameObjects.Particles.ParticleEmitter;
 
+/** Extended UniversalNode with attachedObserver support */
+export interface NodeWithObserver {
+  attachedObserver?: Partial<NodeProperties> & Record<string, any>;
+}
+
+/** Union type for nodes that may have attachedObserver */
+export type UniversalNodeWithObserver = UniversalNode & NodeWithObserver;
+
 export type PropertyTab = "scene" | "object" | "text";
 export type PropertyTabState = {
   tabs: PropertyTab[];
