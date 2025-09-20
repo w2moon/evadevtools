@@ -9,9 +9,151 @@ import pixiDevtoolsOverlay from "./pixi-devtools/pixiDevtoolsOverlay";
 import pixiDevtoolsProperties from "./pixi-devtools/pixiDevtoolsProperties";
 import pixiDevtoolsSelection from "./pixi-devtools/pixiDevtoolsSelection";
 import pixiDevtoolsViewport from "./pixi-devtools/pixiDevtoolsViewport";
-import pixiDevtoolsEva from "./pixi-devtools/pixiDevtoolsEva";
 
 function detect() {
+  (function evaDetect() {
+    const game = globalThis.__EVA_GAME__;
+    const Render = globalThis.__EVA_RENDER__;
+    if (!game) {
+      return;
+    }
+    const renderSystem = game.getSystem("Renderer");
+    globalThis.__PIXI_APP__ = renderSystem.application;
+
+    // 检查所有gameObject，改写observer
+    game.gameObjects.forEach((go) => {
+      const container = renderSystem.containerManager.getContainer(go.id);
+      if (!container) {
+        return;
+      }
+      const observer = container.attachedObserver;
+      if (observer) {
+        return;
+      }
+      const newObserver = {};
+      const transform = go.getComponent("Transform");
+      container.attachedObserver = newObserver;
+      const properties = {
+        x: {
+          obj: () => transform.position,
+          key: "x",
+        },
+        y: {
+          obj: () => transform.position,
+          key: "y",
+        },
+        angle: {
+          obj: () => transform,
+          key: "rotation",
+        },
+        scaleX: {
+          obj: () => transform.scale,
+          key: "x",
+        },
+        scaleY: {
+          obj: () => transform.scale,
+          key: "y",
+        },
+        anchorX: {
+          obj: () => transform.anchor,
+          key: "x",
+        },
+        anchorY: {
+          obj: () => transform.anchor,
+          key: "y",
+        },
+        originX: {
+          obj: () => transform.origin,
+          key: "x",
+        },
+        originY: {
+          obj: () => transform.origin,
+          key: "y",
+        },
+        skewX: {
+          obj: () => transform.skew,
+          key: "y",
+        },
+        skewY: {
+          obj: () => transform.skew,
+          key: "y",
+        },
+        width: {
+          obj: () => transform.size,
+          key: "width",
+        },
+        height: {
+          obj: () => transform.size,
+          key: "height",
+        },
+        style: {
+          obj: () => go.getComponent("Text"),
+          key: "style",
+        },
+        alpha: {
+          obj: () => {
+            const render = go.getComponent("Render");
+            if (render) {
+              return render;
+            }
+            return go.addComponent(Render);
+          },
+          key: "alpha",
+        },
+        visible: {
+          obj: () => {
+            const render = go.getComponent("Render");
+            if (render) {
+              return render;
+            }
+            return go.addComponent(Render);
+          },
+          key: "visible",
+        },
+        sortableChildren: {
+          obj: () => {
+            const render = go.getComponent("Render");
+            if (render) {
+              return render;
+            }
+            return go.addComponent(Render);
+          },
+          key: "sortableChildren",
+        },
+        zIndex: {
+          obj: () => {
+            const render = go.getComponent("Render");
+            if (render) {
+              return render;
+            }
+            return go.addComponent(Render);
+          },
+          key: "zIndex",
+        },
+        text: {
+          obj: () => {
+            return go.getComponent("Text");
+          },
+          key: "text",
+        },
+      };
+      Object.keys(properties).forEach((key) => {
+        const data = properties[key];
+        Object.defineProperty(newObserver, key, {
+          get: () => {
+            return data.obj()?.[key];
+          },
+          set: (v) => {
+            const obj = data.obj();
+            if (!obj) {
+              return;
+            }
+            obj[data.key] = v;
+          },
+        });
+      });
+    });
+  })();
   const win = window as any;
   function hasGlobal(varname: string) {
     if (win[varname]) {
@@ -61,16 +203,6 @@ export default function connect(bridge: BridgeFn): Readable<
   error: Readable<Error | undefined>;
   retry: () => void;
 } {
-  bridge(`(() => {
-    if (typeof window !== 'undefined') {
-      const evaIntegration = (${pixiDevtoolsEva.toString()})({});
-      if (evaIntegration.isAvailable()) {
-        evaIntegration.start();
-        window.__PIXI_INSPECTOR_EVA__ = evaIntegration;
-      }
-    }
-  })();`);
-
   const detected = poll<ReturnType<typeof detect>>(
     bridge,
     `(${detect.toString()}())`,
@@ -107,6 +239,8 @@ export default function connect(bridge: BridgeFn): Readable<
     subscribe: readable.subscribe,
     error: { subscribe: errorStore.subscribe },
     retry() {
+      console.log("retry!!!!");
+      evaDetected.sync();
       detected.sync();
     },
   };
