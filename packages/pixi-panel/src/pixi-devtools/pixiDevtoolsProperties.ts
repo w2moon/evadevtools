@@ -61,6 +61,17 @@ export default function pixiDevtoolsProperties(devtools: PixiDevtools) {
           key: property,
           get: () => object[nested][property] as string | number | boolean,
           set: (value: string | number | boolean) => {
+            // 先检查是否有 attachedObserver，如果有则先设置 observer 上的值
+            if (
+              object.attachedObserver &&
+              typeof object.attachedObserver === "object"
+            ) {
+              if (!object.attachedObserver[nested]) {
+                object.attachedObserver[nested] = {};
+              }
+              object.attachedObserver[nested][property] = value;
+            }
+            // 然后设置原始对象上的值
             object[nested][property] = value;
           },
         },

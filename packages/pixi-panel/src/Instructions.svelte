@@ -51,6 +51,26 @@
         globalThis.__PHASER_GAME__ = game;</code
       >
     </div>
+    <div>
+      or when using <strong class="phaser">Evajs</strong><br />
+      After creating the <i>EvaJs.Game</i>
+      <code>const game = new Game();</code>
+      add the line:
+      <code class="with-copy"
+        ><div class="copy">
+          <Toggle
+            icon="copy"
+            hint="Copy to clipboard"
+            transparent
+            onclick={() =>
+              onCopy(
+                "globalThis.__EVA_GAME__ = game;globalThis.__EVA_RENDER__ = Render;",
+              )}
+          />
+        </div>
+        globalThis.__EVA_GAME__ = game; globalThis.__EVA_RENDER__ = Render;</code
+      >
+    </div>
   </div>
 </div>
 
