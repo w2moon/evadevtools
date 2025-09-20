@@ -240,7 +240,6 @@ export default function connect(bridge: BridgeFn): Readable<
     error: { subscribe: errorStore.subscribe },
     retry() {
       console.log("retry!!!!");
-      evaDetected.sync();
       detected.sync();
     },
   };
