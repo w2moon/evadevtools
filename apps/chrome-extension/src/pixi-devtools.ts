@@ -1,1 +1,1 @@
-chrome.devtools.panels.create("PixiJS", "panel-icon.png", "pixi-panel.html");
+chrome.devtools.panels.create("EvaJS", "panel-icon.png", "pixi-panel.html");
