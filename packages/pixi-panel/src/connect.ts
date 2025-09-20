@@ -9,6 +9,7 @@ import pixiDevtoolsOverlay from "./pixi-devtools/pixiDevtoolsOverlay";
 import pixiDevtoolsProperties from "./pixi-devtools/pixiDevtoolsProperties";
 import pixiDevtoolsSelection from "./pixi-devtools/pixiDevtoolsSelection";
 import pixiDevtoolsViewport from "./pixi-devtools/pixiDevtoolsViewport";
+import pixiDevtoolsEva from "./pixi-devtools/pixiDevtoolsEva";
 
 function detect() {
   const win = window as any;
@@ -60,6 +61,16 @@ export default function connect(bridge: BridgeFn): Readable<
   error: Readable<Error | undefined>;
   retry: () => void;
 } {
+  bridge(`(() => {
+    if (typeof window !== 'undefined') {
+      const evaIntegration = (${pixiDevtoolsEva.toString()})({});
+      if (evaIntegration.isAvailable()) {
+        evaIntegration.start();
+        window.__PIXI_INSPECTOR_EVA__ = evaIntegration;
+      }
+    }
+  })();`);
+
   const detected = poll<ReturnType<typeof detect>>(
     bridge,
     `(${detect.toString()}())`,
