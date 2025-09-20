@@ -6,3 +6,5 @@ node_modules
 /packages/blender-elements/.histoire/
 
 *storybook.log
+
+.DS_Store
