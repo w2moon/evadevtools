@@ -310,6 +310,26 @@
           </Property>
         </Box>
       {/if}
+      {#if typeof props.widthEva === "number"}
+        <Box gap={1}>
+          <Property label="WidthEva">
+            <NumberField
+              value={props.widthEva}
+              step={1}
+              rounded="top"
+              setValue={(value) => onchange({ property: "widthEva", value })}
+            />
+          </Property>
+          <Property label="HeightEva">
+            <NumberField
+              value={props.heightEva}
+              step={1}
+              rounded="bottom"
+              setValue={(value) => onchange({ property: "heightEva", value })}
+            />
+          </Property>
+        </Box>
+      {/if}
     </Box>
   </Panel>
 {/if}

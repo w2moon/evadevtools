@@ -78,6 +78,8 @@ export type NodeProperties = {
   skewY?: number;
   width?: number;
   height?: number;
+  widthEva?: number;
+  heightEva?: number;
   alpha?: number;
   visible?: boolean;
   cullable?: boolean;

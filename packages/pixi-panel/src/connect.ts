@@ -83,6 +83,18 @@ function detect() {
             transform.origin.y = v;
           },
         },
+        widthEva: {
+          get: () => transform.size.width,
+          set: (v) => {
+            transform.size.width = v;
+          },
+        },
+        heightEva: {
+          get: () => transform.size.height,
+          set: (v) => {
+            transform.size.height = v;
+          },
+        },
       });
       const properties = {
         x: {
@@ -129,14 +141,7 @@ function detect() {
           obj: () => transform.skew,
           key: "y",
         },
-        width: {
-          obj: () => transform.size,
-          key: "width",
-        },
-        height: {
-          obj: () => transform.size,
-          key: "height",
-        },
+
         style: {
           obj: () => go.getComponent("Text"),
           key: "style",

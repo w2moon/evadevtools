@@ -146,6 +146,8 @@ export default function pixiDevtoolsProperties(devtools: PixiDevtools) {
       objectDefs.push(...directProp(node, "scaleY", "number"));
       objectDefs.push(...directProp(node, "width", "number"));
       objectDefs.push(...directProp(node, "height", "number"));
+      objectDefs.push(...directProp(node, "widthEva", "number"));
+      objectDefs.push(...directProp(node, "heightEva", "number"));
       objectDefs.push(...pointProperty(node, "origin", "originX", "originY"));
       objectDefs.push(...pointProperty(node, "anchor", "anchorX", "anchorY"));
       objectDefs.push(...pointProperty(node, "pivot", "pivotX", "pivotY"));
