@@ -134,6 +134,10 @@ export default function pixiDevtoolsOverlay(devtools: PixiDevtools) {
     const borders = buildBorders("#ff9f2c");
     overlayEl.appendChild(borders.container);
 
+    // 添加亮蓝色的 Eva 尺寸框
+    const evaBorders = buildBorders("#00bfff");
+    overlayEl.appendChild(evaBorders.container);
+
     const anchor = document.createElement("div");
     anchor.dataset.pixiDevtools = "anchor";
     Object.assign(anchor.style, {
@@ -220,16 +224,36 @@ export default function pixiDevtoolsOverlay(devtools: PixiDevtools) {
         }
         anchorTransform = `matrix(${m.a}, ${m.b}, ${m.c}, ${m.d}, ${m.tx}, ${m.ty}) ${pivot} scale(${unscale.x}, ${unscale.y})`;
       }
+      // 计算 Eva 尺寸
+      let evaSize = { width: size.width, height: size.height };
+      if (
+        "widthEva" in node &&
+        typeof node.widthEva === "number" &&
+        "heightEva" in node &&
+        typeof node.heightEva === "number"
+      ) {
+        evaSize = { width: node.widthEva, height: node.heightEva };
+      }
+
       return {
         box: {
           width: `${size.width}px`,
           height: `${size.height}px`,
           transform: `matrix(${m.a}, ${m.b}, ${m.c}, ${m.d}, ${m.tx}, ${m.ty}) ${offset}`,
         },
+        evaBox: {
+          width: `${evaSize.width}px`,
+          height: `${evaSize.height}px`,
+          transform: `matrix(${m.a}, ${m.b}, ${m.c}, ${m.d}, ${m.tx}, ${m.ty}) ${offset}`,
+        },
         borderTop: `scale(1, ${Math.abs(unscale.y)})`,
         borderRight: `scale(${Math.abs(unscale.x)}, 1)`,
         borderBottom: `scale(1, ${Math.abs(unscale.y)})`,
         borderLeft: `scale(${Math.abs(unscale.x)}, 1)`,
+        evaBorderTop: `scale(1, ${Math.abs(unscale.y)})`,
+        evaBorderRight: `scale(${Math.abs(unscale.x)}, 1)`,
+        evaBorderBottom: `scale(1, ${Math.abs(unscale.y)})`,
+        evaBorderLeft: `scale(${Math.abs(unscale.x)}, 1)`,
         anchor: anchorTransform,
       };
     }
@@ -249,6 +273,7 @@ export default function pixiDevtoolsOverlay(devtools: PixiDevtools) {
       }
       const activeCss = calculateCss(activeNode);
       if (activeCss) {
+        // 更新原始边框
         borders.container.style.transform = activeCss.box.transform;
         borders.container.style.width = activeCss.box.width;
         borders.container.style.height = activeCss.box.height;
@@ -256,9 +281,20 @@ export default function pixiDevtoolsOverlay(devtools: PixiDevtools) {
         borders.right.style.transform = activeCss.borderRight;
         borders.bottom.style.transform = activeCss.borderBottom;
         borders.left.style.transform = activeCss.borderLeft;
+
+        // 更新 Eva 边框
+        evaBorders.container.style.transform = activeCss.evaBox.transform;
+        evaBorders.container.style.width = activeCss.evaBox.width;
+        evaBorders.container.style.height = activeCss.evaBox.height;
+        evaBorders.top.style.transform = activeCss.evaBorderTop;
+        evaBorders.right.style.transform = activeCss.evaBorderRight;
+        evaBorders.bottom.style.transform = activeCss.evaBorderBottom;
+        evaBorders.left.style.transform = activeCss.evaBorderLeft;
+
         anchor.style.transform = activeCss.anchor;
       } else {
         borders.container.style.transform = "scale(0)";
+        evaBorders.container.style.transform = "scale(0)";
         anchor.style.transform = "scale(0)";
       }
       const highlightCss =
