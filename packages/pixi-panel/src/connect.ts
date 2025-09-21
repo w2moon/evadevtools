@@ -37,9 +37,53 @@ function detect() {
       if (observer) {
         return;
       }
+
       const newObserver = {};
       const transform = go.getComponent("Transform");
       container.attachedObserver = newObserver;
+
+      container.setOrigin = function (x: number, y: number) {
+        transform.origin.x = x;
+        transform.origin.y = y;
+      };
+      Object.defineProperties(container, {
+        anchor: {
+          get: () => transform.anchor,
+          set: (v) => {
+            transform.anchor = v;
+          },
+        },
+        anchorX: {
+          get: () => transform.anchor.x,
+          set: (v) => {
+            transform.anchor.x = v;
+          },
+        },
+        anchorY: {
+          get: () => transform.anchor.y,
+          set: (v) => {
+            transform.anchor.y = v;
+          },
+        },
+        origin: {
+          get: () => transform.origin,
+          set: (v) => {
+            transform.origin = v;
+          },
+        },
+        originX: {
+          get: () => transform.origin.x,
+          set: (v) => {
+            transform.origin.x = v;
+          },
+        },
+        originY: {
+          get: () => transform.origin.y,
+          set: (v) => {
+            transform.origin.y = v;
+          },
+        },
+      });
       const properties = {
         x: {
           obj: () => transform.position,
