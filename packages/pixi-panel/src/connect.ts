@@ -20,6 +20,13 @@ function detect() {
     const renderSystem = game.getSystem("Renderer");
     globalThis.__PIXI_APP__ = renderSystem.application;
 
+    Object.defineProperty(renderSystem.application.ticker, "speed", {
+      get: () => game.ticker.timeline.playbackRate,
+      set: (v) => {
+        game.ticker.timeline.playbackRate = v;
+      },
+    });
+
     // 检查所有gameObject，改写observer
     game.gameObjects.forEach((go) => {
       const container = renderSystem.containerManager.getContainer(go.id);
