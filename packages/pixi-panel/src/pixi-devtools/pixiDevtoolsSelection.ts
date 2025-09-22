@@ -10,6 +10,7 @@ export default function pixiDevtoolsSelection(devtools: PixiDevtools) {
       return win.$pixi as UniversalNode | undefined;
     },
     activate(node?: UniversalNode) {
+      win.$eva = node?.attachedObserver?.go ?? node;
       win.$pixi = node;
       devtools.dispatchEvent("activate", node);
     },

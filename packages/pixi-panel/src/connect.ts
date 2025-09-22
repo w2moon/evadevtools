@@ -41,7 +41,9 @@ function detect() {
         return;
       }
 
-      const newObserver = {};
+      const newObserver = {
+        go,
+      };
       const transform = go.getComponent("Transform");
       container.attachedObserver = newObserver;
 
