@@ -80,6 +80,8 @@ export type NodeProperties = {
   height?: number;
   widthEva?: number;
   heightEva?: number;
+  xEva?: number;
+  yEva?: number;
   alpha?: number;
   visible?: boolean;
   cullable?: boolean;

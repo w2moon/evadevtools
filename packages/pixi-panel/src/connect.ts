@@ -100,16 +100,28 @@ function detect() {
             transform.size.height = v;
           },
         },
+        xEva: {
+          get: () => transform.position.x,
+          set: (v) => {
+            transform.position.x = v;
+          },
+        },
+        yEva: {
+          get: () => transform.position.y,
+          set: (v) => {
+            transform.position.y = v;
+          },
+        },
       });
       const properties = {
-        x: {
-          obj: () => transform.position,
-          key: "x",
-        },
-        y: {
-          obj: () => transform.position,
-          key: "y",
-        },
+        // x: {
+        //   obj: () => transform.position,
+        //   key: "x",
+        // },
+        // y: {
+        //   obj: () => transform.position,
+        //   key: "y",
+        // },
         angle: {
           obj: () => transform,
           key: "rotation",

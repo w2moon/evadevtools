@@ -79,6 +79,24 @@
           />
         </Property>
       </Box>
+      <Box gap={1}>
+        <Property label="Location Eva X">
+          <NumberField
+            value={props.xEva}
+            step={1}
+            rounded="top"
+            setValue={(value) => onchange({ property: "xEva", value })}
+          />
+        </Property>
+        <Property label="Y">
+          <NumberField
+            value={props.yEva}
+            step={1}
+            rounded="bottom"
+            setValue={(value) => onchange({ property: "yEva", value })}
+          />
+        </Property>
+      </Box>
 
       {#if typeof props.angle === "number"}
         <Property label="Angle" hint="The angle of the object in degrees">
